@@ -5,36 +5,52 @@ function greet(name) {
   Open(name)
 }
 </script>
-
 <template>
   <main>
-    <button class="btn" @click="greet">Greet</button>
-    <button class="btn" v-for="item in buttonlist4" @click="greet(item)">
+    <p>
+      <router-link to="/">退出</router-link>
+    </p>
+    <router-view></router-view>
+    <button class="btn" v-for="item in buttonlist4" @click="greet(item),handleClick(item)">
       {{ item }}
     </button>
+    <dialog-component v-if="Visiable" ref="dialog"></dialog-component>
   </main>
 </template>
 
 <script>
 import {Search, Test2} from '../../wailsjs/go/main/App.js'
+import dialogComponent from "./dialogComponent.vue";
+import {ref} from "vue";
 export default {
   name: "Mybutton",
+  components:{
+    dialogComponent
+  },
   data() {
     return {
-      buttonlist4:["11","111"],
-      buttonlist3:[{
-        name:"1",
-        targetPath:"aaa"
-      },{
-        name:"2",
-        targetPath:"aaa"
-      }]
+      Visiable:false,
+      buttonlist4:["11","111"]
     }
   },
   created: async function(){
-    //this.buttonlist3[0].name="111111"
     this.buttonlist4=await Search()
-    //this.buttonlist3=await Search()
+  },
+  methods: {
+    // 7.实现点击事件，点击事件一定要包含以下内容
+    handleClick(data) {
+      if (this.Visiable == false) {
+        this.Visiable = true;
+        this.$nextTick(() => {
+          //这里的dialog与上面dialog-component组件里面的ref属性值是一致的
+          //init调用的是dialog-component组件里面的init方法
+          //data是传递给弹窗页面的值
+          this.$refs.dialog.init(data);
+        })
+      } else {
+        this.Visiable = false
+      }
+    }
   }
 }
 </script>
@@ -48,41 +64,5 @@ export default {
 
 .btn{
   width: auto;
-}
-.input-box .btn {
-  width: 60px;
-  height: 30px;
-  line-height: 30px;
-  border-radius: 3px;
-  border: none;
-  margin: 0 0 0 20px;
-  padding: 0 8px;
-  cursor: pointer;
-}
-
-.input-box .btn:hover {
-  background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
-  color: #333333;
-}
-
-.input-box .input {
-  border: none;
-  border-radius: 3px;
-  outline: none;
-  height: 30px;
-  line-height: 30px;
-  padding: 0 10px;
-  background-color: rgba(240, 240, 240, 1);
-  -webkit-font-smoothing: antialiased;
-}
-
-.input-box .input:hover {
-  border: none;
-  background-color: rgba(255, 255, 255, 1);
-}
-
-.input-box .input:focus {
-  border: none;
-  background-color: rgba(255, 255, 255, 1);
 }
 </style>

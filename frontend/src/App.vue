@@ -1,20 +1,19 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'</script>
+import HelloWorld from './components/HelloWorld.vue'
+import Father from "./components/Father.vue";
+</script>
 
 <template>
   <img id="logo" alt="Wails logo" src="./assets/images/logo-universal.png"/>
-  <HelloWorld/>
-  <div>
-    <!-- 调用子组件 -->
-    <my-button/>
-  </div>
+  <Father/>
+  <router-view></router-view>
 </template>
 
 <style>
 #logo {
   display: block;
-  width: 50%;
-  height: 50%;
+  width: 25%;
+  height: 38%;
   margin: auto;
   padding: 10% 0 0;
   background-position: center;
